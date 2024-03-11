@@ -9,9 +9,10 @@ import CustomModal from '@/src/lib/common/modals/CustomModal';
 const FormAction = () => {
   const {
     formTask,
+    errorMessage,
     isOpenErrorModal,
+
     handleAddTask,
-    handleOpenModal,
     handleCloseModal
   } = useTaskMngtControllers();
 
@@ -23,9 +24,7 @@ const FormAction = () => {
       >
         <BaseInputForm name='title' label='Title' />
         <BaseInputForm name='hours' label='Hours' type='number' />
-        <BaseButton type='submit' onClick={handleOpenModal}>
-          Add
-        </BaseButton>
+        <BaseButton type='submit'>Add</BaseButton>
       </form>
       <CustomModal isOpen={isOpenErrorModal} closeModal={handleCloseModal}>
         <div>
@@ -33,7 +32,7 @@ const FormAction = () => {
             <span className='text-black'>Error</span>
           </h1>
           <p className='text-[18px]'>
-            <span className='text-black'>Please fill all fields</span>
+            <span className='text-black'>{errorMessage}</span>
           </p>
         </div>
       </CustomModal>

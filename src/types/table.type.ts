@@ -9,5 +9,7 @@ export interface IColumnsProps {
   dataIndex: string;
   key: string;
   classNameCustom?: HTMLProps<HTMLElement>['className'];
+  width?: string | number;
+  textAlign?: 'left' | 'right' | 'center';
   render?: (record: IDataTable) => React.ReactNode | string;
 }

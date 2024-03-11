@@ -15,7 +15,10 @@ const BaseTable = ({ columns, dataTable }: IBaseTableProps) => {
               {columns.map((item) => (
                 <th
                   key={item.dataIndex}
-                  className='text-sm text-left font-semibold text-grey-darker p-3 bg-gray-200'
+                  className={`text-sm text-left font-semibold text-grey-darker p-3 bg-gray-200`}
+                  style={{
+                    width: item.width || 'auto'
+                  }}
                 >
                   {item.title}
                 </th>

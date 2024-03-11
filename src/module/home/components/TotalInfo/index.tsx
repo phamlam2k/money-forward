@@ -32,7 +32,7 @@ const TotalInfo = () => {
       return { totalTasks: 0, totalHours: 0, totalDays: 0 };
 
     const totalTasks = tasks.length;
-    const totalHours = tasks.reduce((acc, task) => acc + task.hours, 0);
+    const totalHours = tasks.reduce((acc, task) => acc + Number(task.hours), 0);
     const totalDays = (totalHours / 8).toFixed(2);
 
     return {
@@ -43,7 +43,7 @@ const TotalInfo = () => {
   }, [tasks]);
 
   return (
-    <div className='flex items-center gap-[20px]'>
+    <div className='grid grid-cols-3 items-center gap-[20px]'>
       {listTask.map((task) => (
         <TotalItem
           key={task.title}

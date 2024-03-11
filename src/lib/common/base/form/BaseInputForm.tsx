@@ -18,9 +18,9 @@ const BaseInputForm = ({
   const { control } = useFormContext();
 
   return (
-    <div className={`flex flex-col gap-[10px] ${classNameCustom}`}>
+    <div className={`flex flex-col ${classNameCustom}`}>
       <div>
-        <h3 className='text-[18px] font-bold'>
+        <h3 className='text-[14px] font-bold'>
           <span className='text-black'>{label}</span>
         </h3>
       </div>

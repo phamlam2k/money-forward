@@ -12,8 +12,8 @@ export enum TaskActionType {
 type ITaskAction = {
   type: TaskActionType;
   id?: string;
-  title: string;
-  hours: number;
+  title?: string;
+  hours?: number;
 };
 
 export const TasksContext = createContext<ITask[]>([]);
@@ -21,11 +21,26 @@ export const TasksDispatchContext = createContext<Dispatch<ITaskAction> | null>(
   null
 );
 
-const initialTasks: ITask[] = [];
+const initialTasks: ITask[] =
+  typeof window !== 'undefined'
+    ? JSON.parse(localStorage.getItem('list') || '[]')
+    : [];
 
 function tasksReducer(tasks: ITask[], action: ITaskAction) {
   switch (action.type) {
     case 'added': {
+      localStorage.setItem(
+        'list',
+        JSON.stringify([
+          ...tasks,
+          {
+            id: uuidv4(),
+            title: action.title,
+            hours: action.hours
+          }
+        ])
+      );
+
       return [
         ...tasks,
         {
@@ -36,6 +51,11 @@ function tasksReducer(tasks: ITask[], action: ITaskAction) {
       ];
     }
     case 'deleted': {
+      localStorage.setItem(
+        'list',
+        JSON.stringify([...tasks].filter((task) => task.id !== action.id))
+      );
+
       return tasks.filter((task) => task.id !== action.id);
     }
     default: {

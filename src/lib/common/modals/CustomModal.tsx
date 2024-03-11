@@ -19,6 +19,7 @@ const CustomModal = ({ isOpen, closeModal, children }: any) => {
       onRequestClose={closeModal}
       style={customStyles}
       contentLabel='Example Modal'
+      ariaHideApp={false}
     >
       {children}
     </Modal>

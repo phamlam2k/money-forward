@@ -6,7 +6,7 @@ const taskSchema = Yup.object().shape({
     .max(128, 'Title should not exceed 100 characters'),
   hours: Yup.number()
     .required('Hours is required')
-    .min(0, 'Hours should be greater than 0')
+    .min(1, 'Hours should be greater than 0')
     .max(24, 'Hours should not exceed 24')
 });
 

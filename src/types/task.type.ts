@@ -1,5 +1,8 @@
-export interface ITask {
+export type ITask = {
   id: string;
-  title: string;
-  hours: number;
+} & ITaskState;
+
+export interface ITaskState {
+  title?: string;
+  hours?: number;
 }

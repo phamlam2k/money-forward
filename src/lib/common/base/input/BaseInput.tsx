@@ -15,7 +15,10 @@ const BaseInput: React.FC<BaseInputProps> = (props) => {
 
   return (
     <div className={`border ${borderColor} w-full px-[10px] py-[5px]`}>
-      <input className='border-none outline-none w-full' {...props} />
+      <input
+        className='border-none outline-none w-full bg-transparent'
+        {...props}
+      />
     </div>
   );
 };
