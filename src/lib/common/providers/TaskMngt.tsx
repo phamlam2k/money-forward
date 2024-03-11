@@ -11,7 +11,10 @@ export enum TaskActionType {
 
 type ITaskAction = {
   type: TaskActionType;
-} & ITask;
+  id?: string;
+  title: string;
+  hours: number;
+};
 
 export const TasksContext = createContext<ITask[]>([]);
 export const TasksDispatchContext = createContext<Dispatch<ITaskAction> | null>(
