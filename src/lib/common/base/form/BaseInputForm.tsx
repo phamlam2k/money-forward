@@ -6,13 +6,15 @@ type BaseInputFormProps = {
   label: string;
   classNameCustom?: string;
   type?: 'text' | 'number';
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 };
 
 const BaseInputForm = ({
   name,
   label,
   classNameCustom,
-  type = 'text'
+  type = 'text',
+  inputProps
 }: BaseInputFormProps) => {
   const REGEX_NUMBER = /^[0-9]*$/;
   const { control } = useFormContext();
@@ -32,13 +34,18 @@ const BaseInputForm = ({
             value={value}
             onChange={(e) => {
               if (type === 'number' && REGEX_NUMBER.test(e.target.value)) {
-                onChange(e.target.value);
+                if (e.target.value[0] === '0') {
+                  onChange(e.target.value.slice(1));
+                } else {
+                  onChange(e.target.value);
+                }
               }
 
               if (type === 'text') {
                 onChange(e.target.value);
               }
             }}
+            {...inputProps}
           />
         )}
       />

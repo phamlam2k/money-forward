@@ -4,7 +4,7 @@ import { FormProvider } from 'react-hook-form';
 import useTaskMngtControllers from '../../controllers/task_mgnt.controller';
 import BaseInputForm from '@/src/lib/common/base/form/BaseInputForm';
 import BaseButton from '@/src/lib/common/base/buttons/BaseButton';
-import CustomModal from '@/src/lib/common/modals/CustomModal';
+import ErrorValidateModal from '../Modals/ErrorValidateModal';
 
 const FormAction = () => {
   const {
@@ -20,22 +20,32 @@ const FormAction = () => {
     <FormProvider {...formTask}>
       <form
         onSubmit={formTask.handleSubmit(handleAddTask)}
-        className='mt-[20px] flex items-end gap-[30px]'
+        className='mt-[10px] flex items-end gap-[30px]'
       >
-        <BaseInputForm name='title' label='Title' />
-        <BaseInputForm name='hours' label='Hours' type='number' />
-        <BaseButton type='submit'>Add</BaseButton>
+        <BaseInputForm
+          name='title'
+          label='Title'
+          inputProps={{
+            role: 'title'
+          }}
+        />
+        <BaseInputForm
+          name='hours'
+          label='Hours'
+          type='number'
+          inputProps={{
+            role: 'hours'
+          }}
+        />
+        <BaseButton type='submit' role='add_task'>
+          Add
+        </BaseButton>
       </form>
-      <CustomModal isOpen={isOpenErrorModal} closeModal={handleCloseModal}>
-        <div>
-          <h1 className='text-[22px] font-bold'>
-            <span className='text-black'>Error</span>
-          </h1>
-          <p className='text-[18px]'>
-            <span className='text-black'>{errorMessage}</span>
-          </p>
-        </div>
-      </CustomModal>
+      <ErrorValidateModal
+        isOpen={isOpenErrorModal}
+        errorMessage={errorMessage}
+        closeModal={handleCloseModal}
+      />
     </FormProvider>
   );
 };

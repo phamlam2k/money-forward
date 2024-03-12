@@ -26,7 +26,9 @@ const ConfirmDeleteModal: React.FC<IConfirmDeleteModal> = ({
           </span>
         </p>
         <div className='flex justify-end gap-[20px] mt-[20px]'>
-          <BaseButton onClick={onClose}>Cancel</BaseButton>
+          <BaseButton variant='border' onClick={onClose}>
+            Cancel
+          </BaseButton>
           <BaseButton onClick={onDelete}>Delete</BaseButton>
         </div>
       </div>

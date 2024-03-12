@@ -11,7 +11,13 @@ const TaskMngtTemplate = () => {
           <span className='text-[#000]'>Task Management App</span>
         </h1>
         <TotalInfo />
-        <FormAction />
+
+        <div className='p-[20px] shadow-xl rounded-md mt-[30px] w-fit'>
+          <h1 className='text-[22px] font-semibold'>
+            <span className='text-[#000]'>Add task</span>
+          </h1>
+          <FormAction />
+        </div>
         <TableInfo />
       </div>
     </TaskMngtProvider>

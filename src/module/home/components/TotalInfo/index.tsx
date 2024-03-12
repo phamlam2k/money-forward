@@ -28,7 +28,7 @@ const TotalInfo = () => {
   const tasks = useTasks();
 
   const taskTotalInfo = useMemo(() => {
-    if (tasks.length === 0)
+    if (typeof window !== 'undefined' && tasks.length === 0)
       return { totalTasks: 0, totalHours: 0, totalDays: 0 };
 
     const totalTasks = tasks.length;

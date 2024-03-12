@@ -15,7 +15,7 @@ const BaseTable = ({ columns, dataTable }: IBaseTableProps) => {
               {columns.map((item) => (
                 <th
                   key={item.dataIndex}
-                  className={`text-sm text-left font-semibold text-grey-darker p-3 bg-gray-200`}
+                  className={`truncate text-sm text-left font-semibold text-grey-darker p-3 bg-gray-200`}
                   style={{
                     width: item.width || 'auto'
                   }}
@@ -26,23 +26,31 @@ const BaseTable = ({ columns, dataTable }: IBaseTableProps) => {
             </tr>
           </thead>
           <tbody className='align-baseline'>
-            {dataTable.map((row, index) => (
-              <tr
-                key={`row-dashboard-${index}`}
-                className='group cursor-pointer hover:bg-gray-100'
-              >
-                {columns.map((item, index) => {
-                  return (
-                    <td
-                      key={`${item}-${index}`}
-                      className={`text-sm p-3 border-t border-grey-light whitespace-no-wrap ${item.classNameCustom}`}
-                    >
-                      {item.render ? item.render(row) : row[item.key]}
-                    </td>
-                  );
-                })}
+            {dataTable.length === 0 && (
+              <tr>
+                <td colSpan={columns.length} className='text-center p-3'>
+                  No data
+                </td>
               </tr>
-            ))}
+            )}
+            {dataTable.length > 0 &&
+              dataTable.map((row, index) => (
+                <tr
+                  key={`row-dashboard-${index}`}
+                  className='group cursor-pointer hover:bg-gray-100'
+                >
+                  {columns.map((item, index) => {
+                    return (
+                      <td
+                        key={`${item}-${index}`}
+                        className={`truncate text-sm p-3 border-t border-grey-light whitespace-no-wrap ${item.classNameCustom}`}
+                      >
+                        {item.render ? item.render(row) : row[item.key]}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
