@@ -5,12 +5,6 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import FormAction from '../module/home/components/FormAction';
 import { act } from 'react-dom/test-utils';
 
-// jest.mock('../module/home/controllers/task_mgnt.controller', () => ({
-//   ...jest.requireActual('../module/home/controllers/task_mgnt.controller'),
-//   setErrorMessage: jest.fn(),
-//   setIsOpenErrorModal: jest.fn()
-// }));
-
 describe('Form Action Controller', () => {
   it('success validation', () => {
     render(<FormAction />);
