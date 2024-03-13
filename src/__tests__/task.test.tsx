@@ -4,59 +4,24 @@ import React from 'react';
 import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 import FormAction from '../module/home/components/FormAction';
 import { act } from 'react-dom/test-utils';
-import { TaskMngtProvider } from '../lib/common/providers/TaskMngt';
 
-describe('Page', () => {
-  beforeEach(() => {
-    jest.mock('../lib/common/providers/TaskMngt', () => ({
-      ...jest.requireActual('../lib/common/providers/TaskMngt'),
-      useTasks: () => ({
-        tasks: [],
-        tasksFilter: [],
-        keyword: ''
-      }),
-      useTasksDispatch: () => jest.fn()
-    }));
+jest.mock('../module/home/controllers/task_mgnt.controller', () => ({
+  ...jest.requireActual('../module/home/controllers/task_mgnt.controller'),
+  setErrorMessage: jest.fn(),
+  setIsOpenErrorModal: jest.fn()
+}));
 
-    jest.mock('react-hook-form', () => ({
-      ...jest.requireMock('react-hook-form'),
-      Controller: () => <></>,
-      useForm: () => {
-        return {
-          reset: () => jest.fn(),
-          handleSubmit: () => jest.fn()
-        };
-      }
-    }));
-  });
-
-  it('should render the basic fields', () => {
-    render(
-      <TaskMngtProvider>
-        <FormAction />
-      </TaskMngtProvider>
-    );
-    expect(screen.getByRole('add_task')).toBeInTheDocument();
-
-    expect(screen.getByRole('title')).toBeInTheDocument();
-
-    expect(screen.getByRole('hours')).toBeInTheDocument();
-  });
-
-  it('renders a heading', () => {
-    render(
-      <TaskMngtProvider>
-        <FormAction />
-      </TaskMngtProvider>
-    );
+describe('Form Action Controller', () => {
+  it('success validation', () => {
+    render(<FormAction />);
 
     const title = 'Task 1';
-    const hours = 34;
+    const hours = 21;
 
-    const titleInput = screen.getByRole('title');
+    const titleInput = screen.getByTestId('title');
     fireEvent.change(titleInput, { target: { value: title } });
 
-    const hoursInput = screen.getByRole('hours');
+    const hoursInput = screen.getByTestId('hours');
     fireEvent.change(hoursInput, { target: { value: hours } });
 
     const addBtn = screen.getByRole('add_task');
@@ -65,6 +30,23 @@ describe('Page', () => {
       fireEvent.click(addBtn);
     });
 
-    // expect(screen.getByText(title)).toBeInTheDocument();
+    expect(screen.getByTestId('title')).toHaveValue(title);
+    expect(screen.getByTestId('hours')).toHaveValue(String(hours));
+  });
+
+  it('error validation', () => {
+    render(<FormAction />);
+
+    const title = 'Task 1';
+    const hours = 34;
+
+    const titleInput = screen.getByTestId('title');
+    fireEvent.change(titleInput, { target: { value: title } });
+
+    const hoursInput = screen.getByTestId('hours');
+    fireEvent.change(hoursInput, { target: { value: hours } });
+
+    expect(screen.getByTestId('title')).toHaveValue(title);
+    expect(screen.getByTestId('hours')).toHaveValue(String(hours));
   });
 });

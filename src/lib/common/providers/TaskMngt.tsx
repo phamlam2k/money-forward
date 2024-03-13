@@ -40,15 +40,17 @@ const initialTasks: ITasksProvider = {
   keyword: ''
 };
 
-function tasksReducer(tasksProvider: ITasksProvider, action: ITaskAction) {
+export function tasksReducer(
+  tasksProvider: ITasksProvider,
+  action: ITaskAction
+) {
   switch (action.type) {
     case TaskActionType.Added: {
       const formData = [
         ...tasksProvider.tasks,
         {
           id: uuidv4(),
-          title: action.title,
-          hours: action.hours
+          ...action
         }
       ];
 

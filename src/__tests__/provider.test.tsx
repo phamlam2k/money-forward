@@ -1,57 +1,138 @@
-import { useTasksDispatch } from '@/src/lib/common/providers/TaskMngt'; // Import your custom hook
-// Import the hook to test
+import { ITasksProvider } from '@/src/types/task.type';
+import { useReducer } from 'react';
+import {
+  TaskActionType,
+  TaskMngtProvider,
+  tasksReducer,
+  useTasks,
+  useTasksDispatch
+} from '../lib/common/providers/TaskMngt';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import useTaskMngtControllers from '../module/home/controllers/task_mgnt.controller';
 
-const mockUseTasksDispatch = jest.mock(
-  '../lib/common/providers/TaskMngt',
-  () => ({
-    useTasksDispatch: jest.fn()
-  })
-);
+describe('tasksReducer', () => {
+  const localStorageMock = (() => {
+    let store: Record<string, string> = {};
 
-describe('useTaskMngtControllers', () => {
-  it('should handle adding a task successfully', async () => {
-    const mockDispatch = jest.fn();
+    return {
+      getItem(key: string) {
+        return store[key] || null;
+      },
+      setItem(key: string, value: string) {
+        store[key] = value.toString();
+      },
+      clear() {
+        store = {};
+      }
+    };
+  })();
 
-    const { result } = renderHook(() => useTaskMngtControllers());
-    const { handleAddTask } = result.current;
-
-    await act(async () => {
-      handleAddTask({ title: 'Task 1', hours: 2 });
+  beforeAll(() => {
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock
     });
-
-    // expect(mockDispatch).toHaveBeenCalledWith({
-    //   type: 'Added',
-    //   title: 'Task 1',
-    //   hours: 2
-    // });
   });
 
-  it('should handle validation error', async () => {
-    const mockDispatch = jest.fn();
-
-    const { result } = renderHook(() => useTaskMngtControllers());
-    const { handleAddTask, isOpenErrorModal, errorMessage } = result.current;
-
-    await act(async () => {
-      handleAddTask({ title: '', hours: 0 }); // Invalid data
-    });
-
-    expect(mockDispatch).not.toHaveBeenCalled();
-    // expect(isOpenErrorModal).toBe(true);
-    expect(errorMessage).toBeDefined();
+  beforeEach(() => {
+    localStorage.clear();
   });
 
-  it('should close error modal', async () => {
-    const { result } = renderHook(() => useTaskMngtControllers());
-    const { handleCloseModal, isOpenErrorModal } = result.current;
+  test('Adds a task', () => {
+    const task = {
+      id: '1',
+      title: 'Test Task',
+      hours: 3
+    };
 
-    await act(async () => {
-      handleCloseModal();
+    const { result } = renderHook(
+      () => ({
+        value: useTasks(),
+        dispatch: useTasksDispatch()
+      }),
+      {
+        wrapper: TaskMngtProvider
+      }
+    );
+
+    act(() => {
+      result.current.dispatch({
+        type: TaskActionType.Added,
+        ...task
+      });
     });
 
-    expect(isOpenErrorModal).toBe(false);
+    expect(result.current.value.tasks.length).toBe(1);
+    expect(result.current.value.tasksFilter.length).toBe(1);
+    expect(localStorage.getItem('list')).not.toBeNull();
+  });
+
+  test('Deletes a task', () => {
+    const task = {
+      id: '1',
+      title: 'Test Task',
+      hours: 3
+    };
+
+    const { result } = renderHook(
+      () => ({
+        value: useTasks(),
+        dispatch: useTasksDispatch()
+      }),
+      {
+        wrapper: TaskMngtProvider
+      }
+    );
+
+    act(() => {
+      result.current.dispatch({
+        type: TaskActionType.Added,
+        ...task
+      });
+    });
+
+    act(() => {
+      result.current.dispatch({
+        type: TaskActionType.Deleted,
+        id: '1'
+      });
+    });
+
+    expect(result.current.value.tasks.length).toBe(0);
+    expect(result.current.value.tasksFilter.length).toBe(0);
+    expect(localStorage.getItem('list')).toEqual('[]');
+  });
+
+  test('Filters tasks by keyword', () => {
+    const task = {
+      id: '1',
+      title: 'Test Task',
+      hours: 3
+    };
+
+    const { result } = renderHook(
+      () => ({
+        value: useTasks(),
+        dispatch: useTasksDispatch()
+      }),
+      {
+        wrapper: TaskMngtProvider
+      }
+    );
+
+    act(() => {
+      result.current.dispatch({
+        type: TaskActionType.Added,
+        ...task
+      });
+    });
+
+    act(() => {
+      result.current.dispatch({
+        type: TaskActionType.Search,
+        value: 'Test'
+      });
+    });
+
+    expect(result.current.value.tasksFilter.length).toBe(1);
   });
 });

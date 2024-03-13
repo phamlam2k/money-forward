@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import CustomModal from '@/src/lib/common/modals/CustomModal';
-import Image from 'next/image';
 
 type IErrorValidateModal = {
   isOpen: boolean;

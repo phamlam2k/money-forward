@@ -1,12 +1,16 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import BaseInput from '../input/BaseInput';
 
+interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  'data-testid'?: string;
+}
+
 type BaseInputFormProps = {
   name: string;
   label: string;
   classNameCustom?: string;
   type?: 'text' | 'number';
-  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  inputProps?: IInputProps;
 };
 
 const BaseInputForm = ({

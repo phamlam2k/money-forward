@@ -26,7 +26,7 @@ const FormAction = () => {
           name='title'
           label='Title'
           inputProps={{
-            role: 'title'
+            ['data-testid']: 'title'
           }}
         />
         <BaseInputForm
@@ -34,7 +34,7 @@ const FormAction = () => {
           label='Hours'
           type='number'
           inputProps={{
-            role: 'hours'
+            ['data-testid']: 'hours'
           }}
         />
         <BaseButton type='submit' role='add_task'>
