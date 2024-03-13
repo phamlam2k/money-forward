@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import { Loading } from './loading';
 
 export const metadata: Metadata = {
   title: 'Task Management',
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 const TaskMngtTemplate = dynamic(
   () => import('../module/home/template/task_mngt.template'),
   {
-    ssr: false
+    ssr: false,
+    loading: () => <Loading />
   }
 );
 
