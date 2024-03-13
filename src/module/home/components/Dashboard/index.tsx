@@ -3,6 +3,7 @@
 import { useTasks } from '@/src/lib/common/providers/TaskMngt';
 import { useMemo } from 'react';
 import TotalItem from './TotalItem';
+import { ITask } from '@/src/types/task.type';
 
 type IListTask = {
   title: string;
@@ -24,15 +25,18 @@ const listTask: IListTask[] = [
   }
 ];
 
-const TotalInfo = () => {
-  const tasks = useTasks();
+const Dashboard = () => {
+  const { tasks } = useTasks();
 
-  const taskTotalInfo = useMemo(() => {
-    if (typeof window !== 'undefined' && tasks.length === 0)
+  const taskDashboard = useMemo(() => {
+    if (typeof window !== 'undefined' && tasks && tasks.length === 0)
       return { totalTasks: 0, totalHours: 0, totalDays: 0 };
 
     const totalTasks = tasks.length;
-    const totalHours = tasks.reduce((acc, task) => acc + Number(task.hours), 0);
+    const totalHours = tasks.reduce(
+      (acc: number, task: ITask) => acc + Number(task.hours),
+      0
+    );
     const totalDays = (totalHours / 8).toFixed(2);
 
     return {
@@ -48,11 +52,11 @@ const TotalInfo = () => {
         <TotalItem
           key={task.title}
           title={task.title}
-          value={taskTotalInfo[task.hoursKey]}
+          value={taskDashboard[task.hoursKey]}
         />
       ))}
     </div>
   );
 };
 
-export default TotalInfo;
+export default Dashboard;

@@ -1,12 +1,14 @@
 'use client';
 
-import { ITask } from '@/src/types/task.type';
+import { ITasksProvider } from '@/src/types/task.type';
 import { Dispatch, createContext, useContext, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 export enum TaskActionType {
   Added = 'added',
-  Deleted = 'deleted'
+  Deleted = 'deleted',
+  Search = 'search',
+  Keyword = 'keyword'
 }
 
 type ITaskAction = {
@@ -14,49 +16,76 @@ type ITaskAction = {
   id?: string;
   title?: string;
   hours?: number;
+  value?: string;
 };
 
-export const TasksContext = createContext<ITask[]>([]);
-export const TasksDispatchContext = createContext<Dispatch<ITaskAction> | null>(
+export const TasksContext = createContext<ITasksProvider | any>({
+  tasks: [],
+  tasksFilter: [],
+  keyword: ''
+});
+export const TasksDispatchContext = createContext<Dispatch<ITaskAction> | any>(
   null
 );
 
-const initialTasks: ITask[] =
-  typeof window !== 'undefined'
-    ? JSON.parse(localStorage.getItem('list') || '[]')
-    : [];
+const initialTasks: ITasksProvider = {
+  tasks:
+    typeof window !== 'undefined'
+      ? JSON.parse(localStorage.getItem('list') || '[]')
+      : [],
+  tasksFilter:
+    typeof window !== 'undefined'
+      ? JSON.parse(localStorage.getItem('list') || '[]')
+      : [],
+  keyword: ''
+};
 
-function tasksReducer(tasks: ITask[], action: ITaskAction) {
+function tasksReducer(tasksProvider: ITasksProvider, action: ITaskAction) {
   switch (action.type) {
-    case 'added': {
-      localStorage.setItem(
-        'list',
-        JSON.stringify([
-          ...tasks,
-          {
-            id: uuidv4(),
-            title: action.title,
-            hours: action.hours
-          }
-        ])
-      );
-
-      return [
-        ...tasks,
+    case TaskActionType.Added: {
+      const formData = [
+        ...tasksProvider.tasks,
         {
           id: uuidv4(),
           title: action.title,
           hours: action.hours
         }
       ];
+
+      localStorage.setItem('list', JSON.stringify(formData));
+
+      return {
+        tasksFilter: formData,
+        tasks: formData
+      };
     }
-    case 'deleted': {
-      localStorage.setItem(
-        'list',
-        JSON.stringify([...tasks].filter((task) => task.id !== action.id))
+    case TaskActionType.Deleted: {
+      const filterData = [...tasksProvider.tasks].filter(
+        (task) => task.id !== action.id
       );
 
-      return tasks.filter((task) => task.id !== action.id);
+      localStorage.setItem('list', JSON.stringify(filterData));
+
+      return {
+        tasksFilter: filterData,
+        tasks: filterData
+      };
+    }
+    case TaskActionType.Search: {
+      if (!action.value)
+        return {
+          ...tasksProvider,
+          keyword: '',
+          tasksFilter: tasksProvider.tasks
+        };
+
+      return {
+        ...tasksProvider,
+        keyword: action.value,
+        tasksFilter: [...tasksProvider.tasks].filter(
+          (task) => task.title && task.title.includes(action.value as string)
+        )
+      };
     }
     default: {
       throw Error('Unknown action: ' + action.type);
@@ -67,10 +96,10 @@ function tasksReducer(tasks: ITask[], action: ITaskAction) {
 export const TaskMngtProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
-  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
+  const [tasksProvider, dispatch] = useReducer<any>(tasksReducer, initialTasks);
 
   return (
-    <TasksContext.Provider value={tasks}>
+    <TasksContext.Provider value={tasksProvider}>
       <TasksDispatchContext.Provider value={dispatch}>
         {children}
       </TasksDispatchContext.Provider>

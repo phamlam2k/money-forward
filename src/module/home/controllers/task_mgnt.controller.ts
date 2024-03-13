@@ -33,6 +33,11 @@ const useTaskMngtControllers = () => {
             hours: value.hours
           });
 
+          dispatch({
+            type: TaskActionType.Search,
+            value: ''
+          });
+
           formTask.reset();
         }
       })

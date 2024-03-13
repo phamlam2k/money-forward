@@ -1,7 +1,7 @@
 import { TaskMngtProvider } from '@/src/lib/common/providers/TaskMngt';
-import TotalInfo from '../components/TotalInfo';
 import FormAction from '../components/FormAction';
 import TableInfo from '../components/TableInfo';
+import Dashboard from '../components/Dashboard';
 
 const TaskMngtTemplate = () => {
   return (
@@ -10,7 +10,7 @@ const TaskMngtTemplate = () => {
         <h1 className='text-[32px] font-semibold mb-[20px]'>
           <span className='text-[#000]'>Task Management App</span>
         </h1>
-        <TotalInfo />
+        <Dashboard />
 
         <div className='p-[20px] shadow-xl rounded-md mt-[30px] w-fit'>
           <h1 className='text-[22px] font-semibold'>

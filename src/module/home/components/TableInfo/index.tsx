@@ -9,14 +9,12 @@ import {
 import { IColumnsProps, IDataTable } from '@/src/types/table.type';
 import { useState } from 'react';
 import ConfirmDeleteModal from '../Modals/ConfirmDeleteModal';
-import { ITask } from '@/src/types/task.type';
 import BaseInput from '@/src/lib/common/base/input/BaseInput';
 
 const TableInfo = () => {
-  const tasks = useTasks();
+  const { tasksFilter, keyword } = useTasks();
   const dispatch = useTasksDispatch();
 
-  const [filteredTasks, setFilteredTasks] = useState<ITask[]>(tasks);
   const [idTask, setIdTask] = useState<string>('');
 
   const columns: IColumnsProps[] = [
@@ -71,13 +69,12 @@ const TableInfo = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    if (tasks.length === 0) return setFilteredTasks([]);
+    if (!dispatch) return;
 
-    const filtered = [...tasks].filter(
-      (task: ITask) => task.title && task.title.includes(value)
-    );
-
-    setFilteredTasks(filtered);
+    dispatch({
+      type: TaskActionType.Search,
+      value
+    });
   };
 
   return (
@@ -87,11 +84,15 @@ const TableInfo = () => {
           <span className='text-black'>Table Info</span>
         </h1>
         <div>
-          <BaseInput placeholder='Search tasks' onChange={handleSearch} />
+          <BaseInput
+            value={keyword}
+            placeholder='Search tasks'
+            onChange={handleSearch}
+          />
         </div>
       </div>
       <div className='mt-[20px]'>
-        <BaseTable columns={columns} dataTable={filteredTasks} />
+        <BaseTable columns={columns} dataTable={tasksFilter} />
       </div>
 
       <ConfirmDeleteModal
