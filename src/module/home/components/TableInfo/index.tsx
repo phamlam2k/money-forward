@@ -85,7 +85,7 @@ const TableInfo = () => {
         </h1>
         <div>
           <BaseInput
-            value={keyword}
+            value={keyword || ''}
             placeholder='Search tasks'
             onChange={handleSearch}
           />
