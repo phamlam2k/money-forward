@@ -1,18 +1,24 @@
 ## Getting Started
 
-First, run the development server:
+First, installing the package:
+
+```bash
+npm install
+```
+
+Secondly, run the development server:
 
 ```bash
 npm run dev
 ```
 
-Secondly, run test:
+Third, run test:
 
 ```bash
 npm run test --coverage
 ```
 
-Open [http://localhost:3000](http://localhost:1403) with your browser to see the result.
+Open [http://localhost:1403](http://localhost:1403) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
