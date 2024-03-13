@@ -1,9 +1,6 @@
-import { ITasksProvider } from '@/src/types/task.type';
-import { useReducer } from 'react';
 import {
   TaskActionType,
   TaskMngtProvider,
-  tasksReducer,
   useTasks,
   useTasksDispatch
 } from '../lib/common/providers/TaskMngt';
