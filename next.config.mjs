@@ -7,7 +7,9 @@ const nextConfig = {
   reactStrictMode: false,
   experimental: {
     optimizeCss: true // enabling this will enable SSR for Tailwind
-  }
+  },
+
+  swcMinify: true
 };
 
 export default nextConfig;

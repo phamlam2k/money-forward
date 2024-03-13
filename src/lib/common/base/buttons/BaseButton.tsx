@@ -14,8 +14,8 @@ const BaseButton: React.FC<ButtonProps> = (props: ButtonProps) => {
 
   let buttonBgColor =
     variant === 'border'
-      ? 'border border-[#FF0000] text-[#FF0000] cursor-pointer bg-transparent'
-      : 'bg-[#FF0000] text-white cursor-pointer';
+      ? 'border border-[#f84040] text-[#f84040] cursor-pointer bg-transparent'
+      : 'bg-[#f84040] text-white cursor-pointer';
 
   if (disabled) {
     buttonBgColor = 'bg-[#808080] cursor-not-allowed';
